@@ -1,0 +1,119 @@
+import "hello.pn"
+
+import "hello.pn"
+import "hello.pn"
+
+a = 100
+b = b+ 100
+b = 100  < 100
+c = (a < 100) * 3
+
+class jweb
+	def givemoney(many)
+		-100
+		-123.456
+		123.456
+		100
+		"hello,\nworld"
+	end
+	def givemoney(many)
+		-100
+		-123.456
+		123.456
+		100
+		"hello,\nworld"
+	end
+end
+
+def abc(a, b)
+end
+
+funcall()
+funcall(100)
+funcall(abc)
+funcall(100, 2 + 3, (ab / 4) * 3)
+
+[1, 2, 3, 4]
+[4, 5, "hello", 800]
+list = [5, 6, "hello", 3.14]
+[4, 5, "hello", 800, ]
+
+{"hi" : "wow", 100 : 3.14}
+hash = {"hi" : "wow", 100 : 3.14}
+
+{|x| x * x}
+
+
+return 1 + 2
+
+
+if a < 10
+	100
+end
+
+if a < 100
+end
+
+if b
+	100
+elif abc > 10.0
+	asd
+
+else
+end
+
+if b
+	100
+elif abc > 10.0
+	200
+end
+
+
+for x in [1, 2, 3, 4]
+end
+
+for x in [1, 2, 3, 4]
+	print("hello, world")
+end
+
+while True
+end
+
+while True
+	print("hello")
+end
+
+try
+catch x
+end
+
+try
+	100
+catch x
+	200
+end
+
+try
+catch x <- "JwebException"
+	die
+end
+
+try
+catch x <- "JwebException", "Jong10Exception"
+	die
+end
+
+
+a.b.c
+[1, 2, 3, 4].length
+[1, 2, 3, 4].length()
+a.a
+(1 + 2).to_str()
+100.200
+a
+
+(1 + getJweb().work())
+getSystem().getJweb() = 100
+getSystem().getJweb().getJong10() = 100
+
+

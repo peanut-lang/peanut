@@ -1,0 +1,64 @@
+turn = 0
+target = []
+action = 0
+data = 0.0
+
+def findTarget(id, list)
+	myX = list.get(id).get(0)
+	myY = list.get(id).get(1)
+	myRad = list.get(id).get(2)
+	dx = 0.0
+	dy = 0.0
+	ds = 0.0
+	idx = -1
+	minIdx = -1
+	minDs = 10.0
+	minDx = 0.0
+	rad = 0.0
+
+	for pos in list
+		if (idx != id)
+			dx = myX - pos.get(0)
+			dy = myY - pos.get(1)
+			ds = dx * dx + dy * dy
+			if (minDs > ds)
+				minDs = ds
+				minIdx = idx
+				minDx = dx
+				rad = acos(minDs / minDx)
+			end
+		end
+		idx = idx + 1
+	end
+	[minIdx, rad]
+end
+
+def strategy(id, list)
+	action = 0
+	data = 0.1
+	
+	if (turn == 0)
+		target = findTarget(id, list)
+		if (target.get(0) != -1)
+			action = ROTATE
+			data = target.get(1)
+		else
+			action = MOVE
+			data = 0.1
+		end
+		turn = 1
+	elif (turn == 1)
+		action = FIRE
+		data = 0.1
+		turn = 2
+	elif (turn == 2)
+		action = MOVE
+		data = 0.1
+		turn = 0
+	else
+		turn = 0
+	end
+	
+	[action, data]
+end
+
