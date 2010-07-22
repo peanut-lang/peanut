@@ -78,6 +78,8 @@ EXTERN void* MALLOCED;
 #define PROTONAME_HASH "Hash"
 #define PROTONAME_NULL "Null"
 #define PROTONAME_STDIO "Stdio"
+#define PROTONAME_TRUE "true"
+#define PROTONAME_FALSE "false"
 
 #define IS_NOT_INITIALIZED(x)	((x)->type == TYPE_NOT_INITIALIZED)
 #define IS_NULL(x)		((x)->type == TYPE_NULL)

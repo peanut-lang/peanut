@@ -35,6 +35,9 @@ World_Create()
 	World_PutObject(w, PROTONAME_NULL, PnNull_CreatePrototype(w), false);
 	World_PutObject(w, PROTONAME_STDIO, PnStdio_CreatePrototype(w), false);
 	
+	World_PutObject(w, PROTONAME_TRUE, PnBool_Create(w, true), false);
+	World_PutObject(w, PROTONAME_FALSE, PnBool_Create(w, false), false);
+	
 	return w;
 }
 
