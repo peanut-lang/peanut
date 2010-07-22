@@ -149,7 +149,7 @@ static pn_object *
 PnString_Eqfn(pn_world *world, pn_object *object, pn_object *params[], int length)
 {
 	PN_ASSERT(length == 1);
-	pn_object *result = PnObject_CreateInteger(0);
+	pn_object *result = PnObject_CreateInteger(world);
 	pn_object *other = params[0];
 	if (IS_STRING(other) && strcmp(object->str_val, other->str_val) == 0)
 		result->int_val = 1;
