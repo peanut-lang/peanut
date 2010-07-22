@@ -232,6 +232,7 @@ term				: term mul_op factor					{ $$ = new_expression($1, $2, $3); }
 
 mul_op				: MULT					{ $$ = $1; }
 					| DIVIDE				{ $$ = $1; }
+					| MOD					{ $$ = $1; }
 					;
 
 factor				: '(' expression ')'	{ $$ = $2; }
