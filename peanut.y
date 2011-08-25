@@ -13,24 +13,24 @@
 
 	#define YYDEBUG 1
 	#define YYERROR_VERBOSE 1
-	
+
 	extern FILE *yyin;
 	//extern YYSTYPE yylval;
 	//extern char* yytext;
 
 	//extern char token_string[MAX_TOKEN_LENGTH];
-	
+
 	pn_node **tree_nodes;
 	//int len_tree_nodes = 0;
-	
+
 	int yyerrstatus = 0;
 	int yylex();
 	int yyerror(char* msg);
-	
+
 	void lex_push_buffer_file();
 	void lex_push_buffer(char *code);
 	void lex_pop_buffer();
-	
+
 	static pn_node *new_node(NODE_TYPE node_type);
 	static pn_node *new_expression(pn_node *object, char *operator, pn_node *other);
 	static pn_node *new_property(pn_node *object, pn_node *property);
@@ -488,11 +488,11 @@ run_repl(pn_world *world)
 	static unsigned int lineno = 0;
 	char *total = (char *)pn_alloc(sizeof(char) * INPUT_STR_BUF * 30);
 	char input[INPUT_STR_BUF];
-	
+
 	while (1)
 	{
 		total[0] = 0;
-		
+
 		while (1)
 		{
 			fprintf(stdout, "[%u]>> ", lineno);
@@ -502,13 +502,13 @@ run_repl(pn_world *world)
 			strcat(total, input);
 		}
 		lineno++;
-		
+
 		pn_object *ret = Peanut_EvalFromString(total, world, true);
-		
+
 		if (ret == NULL)
 			fprintf(stderr, "# parse error.\n");
 	}
-	
+
 	free(total);
 }
 
@@ -518,21 +518,21 @@ void multi_test()
 	pn_world* worlds[2];
 	worlds[0] = Peanut_CreateWorld();
 	//worlds[1] = Peanut_CreateWorld();
-	
+
 	pn_object* result = NULL;
-	
+
 	fprintf(stderr, "def function[%d, %p]\n", 0, worlds[0]);
 	result = Peanut_EvalFromString("def strategy(id, params)\n\t9999\nend\n", worlds[0], true);
 	PN_ASSERT(result != NULL);
 	fprintf(stderr, "end def[%d]\n", 0);
-	
+
 	/*
 	fprintf(stderr, "def function[%d, %p]\n", 1, worlds[1]);
 	result = Peanut_EvalFromString("def strategy(id, params)\n\t100000\nend\n", worlds[1], true);
 	PN_ASSERT(result != NULL);
 	fprintf(stderr, "end def[%d]\n", 1);
 	*/
-	
+
 	int i;
 	for (i = 0; i < 1000; i++)
 	{
@@ -541,7 +541,7 @@ void multi_test()
 		//result = Peanut_EvalFromString("strategy(100, 300)\n", worlds[0], true);
 		PN_ASSERT(result != NULL);
 		fprintf(stderr, "TEST[%d, %p] end\n", i, worlds[0]);
-		
+
 		/*
 		fprintf(stderr, "TEST[%d, %p] start\n", i, worlds[1]);
 		result = Peanut_EvalFromString("strategy(123, 1234)\n", worlds[1], true);
@@ -549,14 +549,10 @@ void multi_test()
 		fprintf(stderr, "TEST[%d, %p] end\n", i, worlds[1]);
 		*/
 	}
-	
+
 	Peanut_DestroyWorld(worlds[0]);
 	//Peanut_DestroyWorld(worlds[1]);
 }
-
-
-#ifdef STANDALONE
-
 
 static int readfile(const char* filename, char** result)
 {
@@ -588,7 +584,7 @@ main(int argc, char *argv[]) {
 	bool with_repl = false;
 	bool eval_test = false;
 	int filename_count = 0;
-	
+
 	int i;
 	for (i = 1; i < argc; i++)
 	{
@@ -619,9 +615,9 @@ main(int argc, char *argv[]) {
 			filenames[filename_count++] = argv[i];
 		}
 	}
-	
+
 	pn_world *world = Peanut_CreateWorld();
-	
+
 	// 해당 파일을 실행하거나, 쉘모드로 동작한다.
 	if (filename_count > 0)
 	{
@@ -639,7 +635,7 @@ main(int argc, char *argv[]) {
 				Peanut_EvalFromFile(filenames[i], world, trace);
 			}
 		}
-		
+
 		if (with_repl)
 			run_repl(world);
 	}
@@ -647,13 +643,11 @@ main(int argc, char *argv[]) {
 	{
 		run_repl(world);
 	}
-	
+
 	Peanut_DestroyWorld(world);
-	
+
 	return 0;
 }
-#endif
-
 
 pn_world *
 Peanut_CreateWorld()
@@ -665,7 +659,7 @@ pn_object *
 Peanut_EvalFromFile(char *filename, pn_world *world, bool trace)
 {
 	FILE* backup = NULL;
-	
+
 	if (filename != NULL)
 	{
 		backup = yyin;
@@ -676,24 +670,24 @@ Peanut_EvalFromFile(char *filename, pn_world *world, bool trace)
 			return NULL;
 		}
 	}
-	
+
 	// 버퍼를 바꿨다가..
 	lex_push_buffer_file();
-	
+
 	//len_tree_nodes = 0;
 	//len_tree_nodes = world->len_tree_nodes;
 	//tree_nodes = (pn_node**)pn_alloc(sizeof(pn_node*) * SIZE_TREE_NODES);
 	int parsed = yyparse();
-	
+
 	// 버퍼를 원래대로..
 	lex_pop_buffer();
-	
+
 	if (filename != NULL)
 		fclose(yyin);
-	
+
 	// 파일 복구
 	yyin = backup;
-	
+
 	if (parsed == 0)
 	{
 		//world->tree = peanut_tree;
@@ -706,7 +700,7 @@ Peanut_EvalFromFile(char *filename, pn_world *world, bool trace)
 	{
 		yyclearin;
 		yyerrok;
-		
+
 		//free(tree_nodes);
 		return NULL;
 	}
@@ -717,15 +711,15 @@ Peanut_EvalFromString(char *code, pn_world *world, bool trace)
 {
 	// 버퍼를 바꿨다가..
 	lex_push_buffer(code);
-	
+
 	//len_tree_nodes = 0;
 	//tree_nodes = (pn_node**)pn_alloc(sizeof(pn_node*) * SIZE_TREE_NODES);
 	//len_tree_nodes = world->len_tree_nodes;
 	int parsed = yyparse();
-	
+
 	// 버퍼를 원래대로..
 	lex_pop_buffer();
-	
+
 	if (parsed == 0)
 	{
 		//world->tree = peanut_tree;
@@ -749,7 +743,7 @@ Peanut_DestroyWorld(pn_world *world)
 	//FIXME: -_-a
 	//for (i = 0; i < world->len_tree_nodes; i++)
 	//	free(world->tree_nodes[i]);
-	
+
 	//free(world->tree_nodes);
 	World_Destroy(world);
 }
@@ -774,14 +768,14 @@ new_node(NODE_TYPE node_type)
 {
 	//pn_node *node = (pn_node *)pn_alloc(sizeof(pn_node));
 	pn_node *node = &nodes[node_index++];
-	
+
 	// node 를 메모리 관리를 위해서 리스트에 넣어준다.
 
 	//FIXME: -_-a
 	//tree_nodes[len_tree_nodes++] = node;
-	
+
 	//ANDLOG("len_tree_nodes=%d\n", len_tree_nodes);
-	
+
 	PN_ASSERT(node != NULL);
 	memset(node, 0, sizeof(node));
 	node->node_type = node_type;
@@ -814,7 +808,7 @@ new_property(pn_node *object, pn_node *property)
 	PN_ASSERT(object != NULL);
 	PN_ASSERT(property != NULL);
 	PN_ASSERT(property->node_type == NODE_VAR_NAME);
-	
+
 	node->expr.object = object;
 	node->expr.func_name = "@";
 	node->expr.params = property;
@@ -897,17 +891,17 @@ set_object_of_complex_var(pn_node *object, pn_node *chaining_list)
 {
 	PN_ASSERT(object != NULL);
 	PN_ASSERT(chaining_list != NULL);
-	
+
 	pn_node *first = chaining_list;
 	pn_node *term = first;
-	
+
 	while (first != NULL)
 	{
 		PN_ASSERT(first->node_type == NODE_EXPRESSION);
 		term = first;
 		first = first->expr.object;
 	}
-	
+
 	term->expr.object = object;
 	return chaining_list;
 }
@@ -981,8 +975,8 @@ new_for_stmt(pn_node *var, pn_node *expression, pn_node *stmt_list)
 	node->for_stmt.var_name = var->var_name;
 	node->for_stmt.expr = expression;
 	node->for_stmt.stmt_list = stmt_list;
-	
+
 	//free(var);
-	
+
 	return node;
 }
