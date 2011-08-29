@@ -1,17 +1,17 @@
 #add(300, 456)
 
 class Integer
-	def override_test()
-		[1, 2, 3, 4]
-	end
+    def override_test()
+        [1, 2, 3, 4]
+    end
 end
 
 100.override_test()
 
 class Int32
-	def to_str()
-		"*****"
-	end
+    def to_str()
+        "*****"
+    end
 end
 
 class InheritTest < Integer, Int32

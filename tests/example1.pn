@@ -1,18 +1,15 @@
-# 함수 테스트
 def add(a, b)
-	a
-	a + b
+    a
+    a + b
 end
 
-# 문제 해결했음.
 add(3, add(1, 2))
 
 a = 123
 
-# 여러개 테스트
 def sum(a, b, c)
-	a
-	a + b + c
+    a
+    a + b + c
 end
 
 sum(1, 2, 3)
@@ -20,42 +17,39 @@ a
 
 3 % 2
 
-# 문자열 테스트
 "asdf" + "1234" + "5678"
 "a" == "a"
 
-# null 테스트
 b = null
 
-# 문자열과, 더하기 연산 테스트
 "asdf" + 1234
 "asdf" + 3.14
 "asdf" + null
 
-# 이건 아직 안됨. expression 에서 예외처리 해줘야 한다!
+# not yet!
 #1234 + "asdf"
 
 def is_null?(a)
-	a
+    a
 end
 
 is_null?(123)
 
 if 3
-	x = 100
-	1000
+    x = 100
+    1000
 elif 2
-	1234
-	4567
-	8888
-	x
+    1234
+    4567
+    8888
+    x
 else
-	9999
+    9999
 end
 
 i = 5
 while i
-	i = i - 1
+    i = i - 1
 end
 
 null
@@ -64,9 +58,9 @@ class Student
 end
 
 class Student
-	def eat(something)
-		100
-	end
+    def eat(something)
+        100
+    end
 end
 
 s1 = Student.clone()
@@ -96,38 +90,30 @@ iter.next()
 iter.next()
 
 
-# 얘는 evaluate_for_stmt() 에서, 이중 scope로 해도 안 죽는데,
+# double scope not problem, evaluate_for_stmt()
 for x in [1, 2, 3]
-	100
+    100
 end
 
-# 얘는 죽는다.
+# die if double scope in evaluate_for_stmt().. need debug
 for x in [1, 2, 3]
-	x
+    x
 end
-
 
 def test()
-	# 이번 버전에서, return 은 지원하지 않는다.
-	#return 8888
-	9999
+    # not yet
+    #return 8888
+    9999
 end
-
-#test()
-
-
-
 
 xx = {|a| a * a}
 xx
 
 xx(2)
 
-
-
 x3 = {|b|
-	c = b * b
-	c * c
+    c = b * b
+    c * c
 }
 
 x3(3)
@@ -140,9 +126,9 @@ H.get("b")
 H.add({"C":"D"})
 
 for key in H.keys()
-	Stdio.print(key)
-	Stdio.print(" -> ")
-	Stdio.printline(H.get(key))
+    Stdio.print(key)
+    Stdio.print(" -> ")
+    Stdio.printline(H.get(key))
 end
 
 H.values()
@@ -158,6 +144,4 @@ Stdio.print("readed : ")
 Stdio.printline(s)
 
 Integer == Null
-
-
 

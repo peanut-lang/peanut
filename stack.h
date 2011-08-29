@@ -6,7 +6,7 @@
 #include "list.h"
 
 typedef struct _stack {
-	list *data;
+    list *data;
 } stack;
 
 stack *Stack_Create();

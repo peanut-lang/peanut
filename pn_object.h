@@ -12,9 +12,9 @@
 #include "hash.h"
 
 typedef struct _pn_object_val {
-	unsigned int ref_count;
-	hash *members;
-	void *extra_val;	// for PnList, PnHash
+    unsigned int ref_count;
+    hash *members;
+    void *extra_val;    // for PnList, PnHash
 } pn_object_val;
 
 pn_object *PnObject_Clone(pn_world *world, pn_object *object);

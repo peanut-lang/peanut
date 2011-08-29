@@ -5,13 +5,13 @@
 #include <math.h>
 
 static const unsigned int primes[] = {
-	53, 97, 193, 389,
-	769, 1543, 3079, 6151,
-	12289, 24593, 49157, 98317,
-	196613, 393241, 786433, 1572869,
-	3145739, 6291469, 12582917, 25165843,
-	50331653, 100663319, 201326611, 402653189,
-	805306457, 1610612741
+    53, 97, 193, 389,
+    769, 1543, 3079, 6151,
+    12289, 24593, 49157, 98317,
+    196613, 393241, 786433, 1572869,
+    3145739, 6291469, 12582917, 25165843,
+    50331653, 100663319, 201326611, 402653189,
+    805306457, 1610612741
 };
 
 const unsigned int prime_table_length = sizeof(primes) / sizeof(primes[0]);
@@ -19,8 +19,8 @@ const float max_load_factor = 0.65;
 
 hash *
 Hash_Create() {
-	hash *h;
-	int minsize = 160;
+    hash *h;
+    int minsize = 160;
     unsigned int pindex, size = primes[0];
     /* Check requested hashtable isn't too large */
     if (minsize > (1u << 30)) return NULL;
@@ -43,13 +43,13 @@ Hash_Create() {
 
 static unsigned int
 strToHash(const char *k) {
-	int i;
-	unsigned int hResult = 0;
-	int len = strlen(k);
-	for ( i=0; i < len; i++) {
-		hResult = 31 * hResult + k[i];
-	}
-	return hResult;
+    int i;
+    unsigned int hResult = 0;
+    int len = strlen(k);
+    for ( i=0; i < len; i++) {
+        hResult = 31 * hResult + k[i];
+    }
+    return hResult;
 }
 
 static unsigned int
@@ -71,8 +71,8 @@ indexFor(unsigned int tablelength, unsigned int hashvalue) {
 
 static int
 hashtable_expand(hash *h) {
-	PN_ASSERT(h != NULL);
-	
+    PN_ASSERT(h != NULL);
+
     /* Double the size of the table to accomodate more entries */
     hash_entry **newtable;
     hash_entry *e;
@@ -100,7 +100,7 @@ hashtable_expand(hash *h) {
         h->table = newtable;
     }
     /* Plan B: realloc instead */
-    else 
+    else
     {
         newtable = (hash_entry **)
                    realloc(h->table, newsize *sizeof(hash_entry *));
@@ -130,11 +130,11 @@ hashtable_expand(hash *h) {
 
 static int
 __Hash_Put(hash *h, const char *k, void *v) {
-	PN_ASSERT(h != NULL);
-	
-	// FIXME: duplicate key를 ASSERT로 막아놈
-	PN_ASSERT(Hash_Get(h, k) == NULL);
-	
+    PN_ASSERT(h != NULL);
+
+    // FIXME: check duplicate key
+    PN_ASSERT(Hash_Get(h, k) == NULL);
+
     /* This method allows duplicate keys - but they shouldn't be used */
     unsigned int index;
     hash_entry *e;
@@ -159,23 +159,23 @@ __Hash_Put(hash *h, const char *k, void *v) {
 
 void *
 Hash_Put(hash *h, const char *k, void *v) {
-	PN_ASSERT(h != NULL);
-	void *old = NULL;
-	
-	// FIXME 여기에서, 해쉬에서 Remove 를 하면 안될듯????
-	if (Hash_Get(h, k) != NULL)
-		old = Hash_Remove(h, k);
-	
-	if (__Hash_Put(h, k, v) == 0)
-		PN_FAIL("__Hash_Put() failed.");
-	
-	return old;
+    PN_ASSERT(h != NULL);
+    void *old = NULL;
+
+    // FIXME this is a workaround. maybe .
+    if (Hash_Get(h, k) != NULL)
+        old = Hash_Remove(h, k);
+
+    if (__Hash_Put(h, k, v) == 0)
+        PN_FAIL("__Hash_Put() failed.");
+
+    return old;
 }
 
 void * /* returns value associated with key */
 Hash_Get(hash *h, const char *k) {
-	PN_ASSERT(h != NULL);
-	
+    PN_ASSERT(h != NULL);
+
     hash_entry *e;
     unsigned int hashvalue, index;
     hashvalue = toHash(h,k);
@@ -192,8 +192,8 @@ Hash_Get(hash *h, const char *k) {
 
 void * /* returns value associated with key */
 Hash_Remove(hash *h, const char *k) {
-	PN_ASSERT(h != NULL);
-	
+    PN_ASSERT(h != NULL);
+
     /* TODO: consider compacting the table when the load factor drops enough,
      *       or provide a 'compact' method. */
 
@@ -226,14 +226,14 @@ Hash_Remove(hash *h, const char *k) {
 
 unsigned int
 Hash_Count(hash *h) {
-	PN_ASSERT(h != NULL);
+    PN_ASSERT(h != NULL);
     return h->entrycount;
 }
-	
+
 void
 Hash_Destroy(hash *h, bool free_values) {
-	PN_ASSERT(h != NULL);
-	
+    PN_ASSERT(h != NULL);
+
     unsigned int i;
     hash_entry *e, *f;
     hash_entry **table = h->table;
@@ -263,8 +263,8 @@ Hash_Destroy(hash *h, bool free_values) {
 
 hash_itr *
 Hash_Iterator(hash *h) {
-	PN_ASSERT(h != NULL);
-	
+    PN_ASSERT(h != NULL);
+
     unsigned int i, tablelength;
     hash_itr *itr = (hash_itr *)pn_alloc(sizeof(hash_itr));
     if (NULL == itr) return NULL;
@@ -293,20 +293,20 @@ Hash_Iterator(hash *h) {
 
 char *
 Hash_Iterator_Key(hash_itr *i) {
-	PN_ASSERT(i != NULL);
-	if (i->e != NULL)
-		return i->e->k;
-	else
-		return NULL;
+    PN_ASSERT(i != NULL);
+    if (i->e != NULL)
+        return i->e->k;
+    else
+        return NULL;
 }
 
 void *
 Hash_Iterator_Value(hash_itr *i) {
-	PN_ASSERT(i != NULL);
-	if (i->e != NULL)
-		return i->e->v;
-	else
-		return NULL;
+    PN_ASSERT(i != NULL);
+    if (i->e != NULL)
+        return i->e->v;
+    else
+        return NULL;
 }
 
 /*****************************************************************************/
@@ -315,8 +315,8 @@ Hash_Iterator_Value(hash_itr *i) {
 
 int
 Hash_Iterator_Advance(hash_itr *itr) {
-	PN_ASSERT(itr != NULL);
-	unsigned int j,tablelength;
+    PN_ASSERT(itr != NULL);
+    unsigned int j,tablelength;
     hash_entry **table;
     hash_entry *next;
     if (NULL == itr->e) return 0; /* stupidity check */
@@ -360,7 +360,7 @@ Hash_Iterator_Advance(hash_itr *itr) {
 
 int
 Hash_Iterator_Remove(hash_itr *itr) {
-	PN_ASSERT(itr != NULL);
+    PN_ASSERT(itr != NULL);
     hash_entry *remember_e, *remember_parent;
     int ret;
 
@@ -389,8 +389,8 @@ Hash_Iterator_Remove(hash_itr *itr) {
 /*****************************************************************************/
 int /* returns zero if not found */
 Hash_Iterator_Search(hash_itr *itr, hash *h, const char *k) {
-	PN_ASSERT(itr != NULL);
-	PN_ASSERT(h != NULL);
+    PN_ASSERT(itr != NULL);
+    PN_ASSERT(h != NULL);
     hash_entry *e, *parent;
     unsigned int hashvalue, index;
 

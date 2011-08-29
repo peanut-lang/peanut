@@ -57,7 +57,7 @@ peanut.tab.o: peanut.tab.c
 	$(CC) $(CFLAGS) -c $<
 
 test: $(BIN)
-	./$(BIN) -t example1.pn example2.pn < input.txt
+	./$(BIN) -t tests/example1.pn tests/example2.pn < tests/input.txt
 
 clean:
 	rm -f $(BIN) peanut.tab.c peanut.tab.h peanut.output lex.yy.c $(OBJS)

@@ -5,20 +5,20 @@
 #include <stdbool.h>
 
 typedef struct _hash_entry {
-	char *k;
-	void *v;
-	unsigned int h;
-	struct _hash_entry *next;
+    char *k;
+    void *v;
+    unsigned int h;
+    struct _hash_entry *next;
 } hash_entry;
 
 typedef struct _hash {
-	unsigned int tablelength;
-	hash_entry **table;
-	unsigned int entrycount;
-	unsigned int loadlimit;
-	unsigned int primeindex;
-	//unsigned int (*hashfn) (void *k);
-	int (*eqfn) (const char *k1, const char *k2);
+    unsigned int tablelength;
+    hash_entry **table;
+    unsigned int entrycount;
+    unsigned int loadlimit;
+    unsigned int primeindex;
+    //unsigned int (*hashfn) (void *k);
+    int (*eqfn) (const char *k1, const char *k2);
 } hash;
 
 hash *Hash_Create();

@@ -9,20 +9,20 @@ b = 100  < 100
 c = (a < 100) * 3
 
 class jweb
-	def givemoney(many)
-		-100
-		-123.456
-		123.456
-		100
-		"hello,\nworld"
-	end
-	def givemoney(many)
-		-100
-		-123.456
-		123.456
-		100
-		"hello,\nworld"
-	end
+    def givemoney(many)
+        -100
+        -123.456
+        123.456
+        100
+        "hello,\nworld"
+    end
+    def givemoney(many)
+        -100
+        -123.456
+        123.456
+        100
+        "hello,\nworld"
+    end
 end
 
 def abc(a, b)
@@ -48,24 +48,24 @@ return 1 + 2
 
 
 if a < 10
-	100
+    100
 end
 
 if a < 100
 end
 
 if b
-	100
+    100
 elif abc > 10.0
-	asd
+    asd
 
 else
 end
 
 if b
-	100
+    100
 elif abc > 10.0
-	200
+    200
 end
 
 
@@ -73,14 +73,14 @@ for x in [1, 2, 3, 4]
 end
 
 for x in [1, 2, 3, 4]
-	print("hello, world")
+    print("hello, world")
 end
 
 while True
 end
 
 while True
-	print("hello")
+    print("hello")
 end
 
 try
@@ -88,19 +88,19 @@ catch x
 end
 
 try
-	100
+    100
 catch x
-	200
+    200
 end
 
 try
 catch x <- "JwebException"
-	die
+    die
 end
 
 try
 catch x <- "JwebException", "Jong10Exception"
-	die
+    die
 end
 
 

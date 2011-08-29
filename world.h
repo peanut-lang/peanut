@@ -9,8 +9,8 @@
 
 typedef struct _scope_item
 {
-	hash *h;
-	list *l;
+    hash *h;
+    list *l;
 } scope_item;
 
 pn_world *World_Create();
