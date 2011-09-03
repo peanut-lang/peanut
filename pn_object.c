@@ -146,19 +146,19 @@ pn_object *PnObject_ToString(pn_world *world, pn_object *object)
     pn_object *to_str = PnObject_GetAttr(object, "to_str");
 
     if (IS_NATIVE(object)) {
-        char *str = pn_alloc(20);
+        char *str = malloc(20);
         sprintf(str, "NATIVE(%p)", object->func.body_pointer);
         result = PnString_Create(world, str);
         free(str);
     } else if(IS_FUNCTION(object)) {
-        char *str = pn_alloc(20);
+        char *str = malloc(20);
         sprintf(str, "FUNC(%p)", object->func.body_node);
         result = PnString_Create(world, str);
         free(str);
     } else if (!IS_OBJECT(object) && to_str != NULL) {
         result = PnFunction_ExecuteByFuncObject(to_str, world, object, NULL, 0);
     } else if(IS_OBJECT(object)) {
-        char *buf = pn_alloc(TO_STRING_BUF);
+        char *buf = malloc(TO_STRING_BUF);
         memset(buf, 0, TO_STRING_BUF);
         strcat(buf, "{");
         if (Hash_Count(object->obj_val->members) > 0) {
@@ -182,7 +182,7 @@ pn_object *PnObject_ToString(pn_world *world, pn_object *object)
         strcat(buf, "}");
 
         int len = strlen(buf);
-        char *str = pn_alloc(len + 1);
+        char *str = malloc(len + 1);
         strcpy(str, buf);
         result = PnString_Create(world, str);
         free(buf);
@@ -228,12 +228,12 @@ pn_object *PnObject_CreateEmptyObject(pn_world *world)
 
 pn_object *PnObject_CreateEmptyObjectByNotMembers(pn_world *world)
 {
-    pn_object *obj = pn_alloc(sizeof(pn_object));
+    pn_object *obj = malloc(sizeof(pn_object));
     PN_ASSERT(obj != NULL);
     memset(obj, 0, sizeof(pn_object));
     obj->type = TYPE_OBJECT;
 
-    obj->obj_val = pn_alloc(sizeof(pn_object_val));
+    obj->obj_val = malloc(sizeof(pn_object_val));
     obj->obj_val->ref_count = 0;
     obj->obj_val->members = NULL;
 
@@ -246,7 +246,7 @@ pn_object *PnObject_CreateFromReference(pn_world *world, pn_object *other)
 {
     PN_ASSERT(other != NULL);
 
-    pn_object *obj = pn_alloc(sizeof(pn_object));
+    pn_object *obj = malloc(sizeof(pn_object));
     PN_ASSERT(obj != NULL);
     memset(obj, 0, sizeof(pn_object));
 

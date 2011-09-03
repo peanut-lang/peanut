@@ -102,7 +102,7 @@ static pn_object *PnInteger_Mod(pn_world *world, pn_object *object, pn_object *p
 static pn_object *PnInteger_ToString(pn_world *world, pn_object *object, pn_object *params[], int length)
 {
     PN_ASSERT(length == 0);
-    char *s = pn_alloc(sizeof(char) * 11);  // maximum is 11
+    char *s = malloc(sizeof(char) * 11);  // maximum is 11
     sprintf(s, "%d", object->int_val);
     pn_object *result = PnString_Create(world, s);
     free(s);

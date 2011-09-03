@@ -28,9 +28,9 @@ Hash_Create() {
     for (pindex=0; pindex < prime_table_length; pindex++) {
         if (primes[pindex] > minsize) { size = primes[pindex]; break; }
     }
-    h = (hash *)pn_alloc(sizeof(hash));
+    h = (hash *)malloc(sizeof(hash));
     if (NULL == h) return NULL; /*oom*/
-    h->table = (hash_entry **)pn_alloc(sizeof(hash_entry *) * size);
+    h->table = (hash_entry **)malloc(sizeof(hash_entry *) * size);
     if (NULL == h->table) { free(h); return NULL; } /*oom*/
     memset(h->table, 0, size *sizeof(hash_entry *));
     h->tablelength  = size;
@@ -82,7 +82,7 @@ hashtable_expand(hash *h) {
     if (h->primeindex == (prime_table_length - 1)) return 0;
     newsize = primes[++(h->primeindex)];
 
-    newtable = (hash_entry **)pn_alloc(sizeof(hash_entry*) * newsize);
+    newtable = (hash_entry **)malloc(sizeof(hash_entry*) * newsize);
     if (NULL != newtable)
     {
         memset(newtable, 0, newsize *sizeof(hash_entry *));
@@ -146,7 +146,7 @@ __Hash_Put(hash *h, const char *k, void *v) {
          * element may be ok. Next time we insert, we'll try expanding again.*/
         hashtable_expand(h);
     }
-    e = (hash_entry *)pn_alloc(sizeof(hash_entry));
+    e = (hash_entry *)malloc(sizeof(hash_entry));
     if (NULL == e) { --(h->entrycount); return 0; } /*oom*/
     e->h = toHash(h,k);
     index = indexFor(h->tablelength,e->h);
@@ -266,7 +266,7 @@ Hash_Iterator(hash *h) {
     PN_ASSERT(h != NULL);
 
     unsigned int i, tablelength;
-    hash_itr *itr = (hash_itr *)pn_alloc(sizeof(hash_itr));
+    hash_itr *itr = (hash_itr *)malloc(sizeof(hash_itr));
     if (NULL == itr) return NULL;
     itr->h = h;
     itr->e = NULL;

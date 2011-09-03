@@ -105,7 +105,7 @@ static pn_object *PnHash_ToString(pn_world *world, pn_object *object, pn_object 
     PN_ASSERT(object->obj_val->extra_val != NULL);
     PN_ASSERT(length == 0);
 
-    char *str = (char *)pn_alloc(sizeof(char) * TO_STRING_BUF);
+    char *str = (char *)malloc(sizeof(char) * TO_STRING_BUF);
     strcpy(str, "{");
 
     int size = Hash_Count(object->obj_val->extra_val);

@@ -54,7 +54,7 @@ static pn_object *PnStdio_PrintLine(pn_world *world, pn_object *object, pn_objec
     __print("\n");
 
     size_t len = strlen(a_param->str_val);
-    char *s = (char *)pn_alloc(sizeof(char) * (len + 2));
+    char *s = (char *)malloc(sizeof(char) * (len + 2));
     strcpy(s, a_param->str_val);
     s[len] = '\n';
     s[len+1] = 0;

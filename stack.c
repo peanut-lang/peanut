@@ -6,7 +6,7 @@
 stack *
 Stack_Create()
 {
-    stack *s = (stack *)pn_alloc(sizeof(stack));
+    stack *s = (stack *)malloc(sizeof(stack));
     PN_ASSERT(s != NULL);
     s->data = List_Create();
     return s;

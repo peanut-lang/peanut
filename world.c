@@ -13,7 +13,7 @@
 
 pn_world *World_Create()
 {
-    pn_world *w = (pn_world *)pn_alloc(sizeof(pn_world));
+    pn_world *w = (pn_world *)malloc(sizeof(pn_world));
     w->scope = Stack_Create();
     //w->tree = NULL;
     w->tree_nodes = NULL;
@@ -68,7 +68,7 @@ void World_Destroy(pn_world *w)
 
 void World_StartScope(pn_world *w, pn_node *pc)
 {
-    scope_item *item = pn_alloc(sizeof(scope_item));
+    scope_item *item = malloc(sizeof(scope_item));
     item->h = Hash_Create();
     item->l = List_Create();
     Stack_Push(w->scope, item);

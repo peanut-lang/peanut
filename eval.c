@@ -116,7 +116,7 @@ static pn_object *evaluate_expression(pn_world *world, pn_node *node)
 
     // getting all parameters
     int i, size = count_siblings(node->expr.params);
-    pn_object **params = (pn_object **)pn_alloc(sizeof(pn_object *) * size);
+    pn_object **params = (pn_object **)malloc(sizeof(pn_object *) * size);
     pn_node *cur = node->expr.params;
     pn_node *var_name_cur = NULL;
 

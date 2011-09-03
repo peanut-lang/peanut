@@ -9,7 +9,7 @@ static pn_object *__concatenate_strings(pn_world *world, pn_object *object, pn_o
     int str_length = strlen(object->str_val);
     int other_str_length = strlen(other->str_val);
     int total_length = str_length + other_str_length + 1;
-    char *str = pn_alloc(sizeof(char) * total_length);
+    char *str = malloc(sizeof(char) * total_length);
     strncpy(str, object->str_val, str_length);
     str[str_length] = 0;
     strncat(str, other->str_val, other_str_length);
@@ -42,7 +42,7 @@ static pn_object *PnString_Mult(pn_world *world, pn_object *object, pn_object *p
     if (IS_INTEGER(other)) {
         int repeat = other->int_val;
         int str_length = strlen(object->str_val);
-        char *str = pn_alloc(str_length * repeat + 1);
+        char *str = malloc(str_length * repeat + 1);
         result = PnString_Create(world, str);
         int i;
         for (i = 0; i < repeat; i++) {
@@ -99,7 +99,7 @@ static pn_object *PnString_Substring(pn_world *world, pn_object *object, pn_obje
         return NULL;
     }
 
-    char *str = pn_alloc(result_str_length + 1);
+    char *str = malloc(result_str_length + 1);
     strncpy(str, object->str_val + begin_index, result_str_length);
     str[result_str_length] = 0;
     pn_object *result = PnString_Create(world, str);
@@ -111,7 +111,7 @@ static pn_object *PnString_Reverse(pn_world *world, pn_object *object, pn_object
     PN_ASSERT(length == 0);
     int i;
     int str_length = strlen(object->str_val);
-    char *str = pn_alloc(str_length + 1);
+    char *str = malloc(str_length + 1);
     for (i = 0; i < str_length; i++)
         str[str_length - i - 1] = object->str_val[i];
 

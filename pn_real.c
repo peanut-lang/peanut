@@ -101,7 +101,7 @@ static pn_object *PnReal_ToString(pn_world *world, pn_object *object, pn_object 
     sprintf(ch, "%.10f", object->real_val);
     int str_length = strlen(ch);
     pn_object *result = PnObject_CreateString(world);
-    result->str_val = pn_alloc(str_length + 1);
+    result->str_val = malloc(str_length + 1);
     strncpy(result->str_val, ch, str_length);
     return result;
 }

@@ -50,7 +50,7 @@ static void **alloc_data(size_t size, size_t *allocated_size)
     if (size == TOO_LARGE)
         return NULL;
     else
-        return (void **)pn_alloc(sizeof(void*) * size);
+        return (void **)malloc(sizeof(void*) * size);
 }
 
 /**
@@ -83,7 +83,7 @@ static void *list_memset(void *dest, int c, size_t len)
  */
 list *List_Create()
 {
-    list *l = (list *)pn_alloc(sizeof(list));
+    list *l = (list *)malloc(sizeof(list));
     l->data = alloc_data(MIN_LIST_SIZE, NULL);
     l->size = 0;
     l->reserved_size = MIN_LIST_SIZE;

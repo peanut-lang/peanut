@@ -25,17 +25,6 @@
 #endif
 
 
-EXTERN void* MALLOCED;
-#include <signal.h>
-
-#define pn_alloc(...) \
-    ( \
-         (MALLOCED = malloc(__VA_ARGS__)) != NULL ? \
-        MALLOCED : \
-        (void*)(long)(fprintf(stderr, "Out of memory.\n") + raise(SIGABRT)) \
-    )
-
-
 //#define YYSTYPE pn_node*
 
 #ifdef PEANUT_DEBUG
