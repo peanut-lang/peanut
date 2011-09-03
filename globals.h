@@ -91,7 +91,6 @@ EXTERN void* MALLOCED;
 #define IS_NATIVE(x)    ((x)->type == TYPE_NATIVE)
 #define IS_FUNCTION(x)    ((x)->type == TYPE_FUNCTION)
 
-#define UNION union
 #undef TYPE_BOOL
 
 typedef enum _TYPE {
@@ -149,12 +148,12 @@ typedef struct _pn_object {
     struct _pn_object_val *obj_val;
 
     // FIXME: move these to obj_val
-    UNION {
+    union {
         int int_val;
         double real_val;
         char *str_val;
         bool bool_val;
-        UNION {
+        union {
             struct _pn_object *(* body_pointer)(struct _pn_world *, struct _pn_object *, struct _pn_object **, int);
             struct _pn_node *body_node;
         } func;
@@ -171,7 +170,7 @@ typedef struct _pn_node {
     NODE_TYPE node_type;
     struct _pn_node *sibling;
 
-    UNION {
+    union {
         // LITERAL: STRING, INT, REAL
         pn_object value;
 

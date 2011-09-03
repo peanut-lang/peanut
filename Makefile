@@ -60,4 +60,4 @@ test: $(BIN)
 	./$(BIN) -t tests/example1.pn tests/example2.pn < tests/input.txt
 
 clean:
-	rm -f $(BIN) peanut.tab.c peanut.tab.h peanut.output lex.yy.c $(OBJS)
+	rm -f $(BIN) peanut.tab.c peanut.tab.h peanut.output lex.yy.c test_* $(OBJS)

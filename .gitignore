@@ -3,6 +3,7 @@
 .hgignore
 tags
 TAGS
+cscope.out
 *.orig
 samples
 samples/*
