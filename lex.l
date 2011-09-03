@@ -12,6 +12,7 @@
 
     int quote_string();
 
+    #define YY_NO_INPUT
 %}
 
 %option nounput
