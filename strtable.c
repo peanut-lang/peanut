@@ -1,34 +1,34 @@
-#include "strtab.h"
-#include "pnerrno.h"
+#include "strtable.h"
 #include <stdlib.h>
 #include <string.h>
+#include <errno.h>
 
-strtab *strtab_create()
+StrTable *StrTable_Create()
 {
-    strtab *t = malloc(sizeof(strtab));
+    StrTable *t = malloc(sizeof(StrTable));
     if (t != 0)
         t->len = 0;
     return t;
 }
 
-int strtab_destroy(strtab *t)
+int StrTable_Destroy(StrTable *t)
 {
     if (t == 0)
-        return -EPFAULT;
+        return -EFAULT;
 
     free(t);
     return 0;
 }
 
-int strtab_put(strtab *t, const char *str, bool duplicate)
+int StrTable_Put(StrTable *t, const char *str, bool duplicate)
 {
     int i;
 
     if (t == 0)
-        return -EPFAULT;
+        return -EFAULT;
 
     if (t->len + 1 >= MAX_STRTABLE_SIZE)
-        return -EPNOSPC;
+        return -ENOSPC;
 
     // if exists
     for (i = 0; i < t->len; i++) {
@@ -36,12 +36,12 @@ int strtab_put(strtab *t, const char *str, bool duplicate)
             return i;
     }
 
-    // or create new one if not exists
+    // or Create new one if not exists
     t->s[t->len] = duplicate ? strdup(str) : str;
     return t->len++;
 }
 
-const char *strtab_get(strtab *t, int index)
+const char *StrTable_Get(StrTable *t, int index)
 {
     if (t)
         return t->s[index];
@@ -49,14 +49,14 @@ const char *strtab_get(strtab *t, int index)
         return 0;
 }
 
-int strtab_errno(strtab *t, int index)
+int StrTable_GetError(StrTable *t, int index)
 {
     if (t == 0)
-        return -EPFAULT;
+        return -EFAULT;
     else if (index < 0 || index >= MAX_STRTABLE_SIZE)
-        return -EPINVAL;
+        return -EINVAL;
     else if (t->s[index] == 0)
-        return -EPNOENT;
+        return -ENOENT;
     else
         return 0;
 }

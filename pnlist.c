@@ -1,9 +1,9 @@
-#include "pn_list.h"
+#include "pnlist.h"
 #include "list.h"
-#include "pn_string.h"
-#include "pn_object.h"
-#include "pn_function.h"
-#include "pn_bool.h"
+#include "pnstring.h"
+#include "pnobject.h"
+#include "pnfunction.h"
+#include "pnbool.h"
 
 #include <stdlib.h>
 #include <string.h>
@@ -73,7 +73,7 @@ static pn_object *PnList_RemoveItem(pn_world *world, pn_object *object, pn_objec
     PN_ASSERT(length == 1);
     PN_ASSERT(IS_INTEGER(params[0]));
 
-    int which = params[0]->int_val;
+    int which = params[0]->val.int_val;
     List_Remove(object->obj_val->extra_val, which, 1, pn_list_item_deleter);
 
     return object;
@@ -104,7 +104,7 @@ static pn_object *PnList_Insert(pn_world *world, pn_object *object, pn_object *p
     PN_ASSERT(length == 2);
     PN_ASSERT(IS_INTEGER(params[0]));
 
-    int which = params[0]->int_val;
+    int which = params[0]->val.int_val;
     pn_object *item = params[1];
 
     List_InsertItem(object->obj_val->extra_val, which, item);
@@ -123,7 +123,7 @@ static pn_object *PnList_Get(pn_world *world, pn_object *object, pn_object *para
     PN_ASSERT(length == 1);
     PN_ASSERT(IS_INTEGER(params[0]));
 
-    int which = params[0]->int_val;
+    int which = params[0]->val.int_val;
     pn_object *item = List_Get(object->obj_val->extra_val, which);
 
     PN_ASSERT(item != NULL);
@@ -142,7 +142,7 @@ static pn_object *PnList_Put(pn_world *world, pn_object *object, pn_object *para
     PN_ASSERT(length == 2);
     PN_ASSERT(IS_INTEGER(params[0]));
 
-    int which = params[0]->int_val;
+    int which = params[0]->val.int_val;
     pn_object *item = params[1];
 
     List_Put((list *)object->obj_val->extra_val, which, item);
@@ -183,7 +183,7 @@ static pn_object *PnList_ToString(pn_world *world, pn_object *object, pn_object 
         pn_object *item = List_Get(object->obj_val->extra_val, index);
         pn_object *child = PnFunction_ExecuteByObject("to_str", world, item, NULL, 0);
         PN_ASSERT(IS_STRING(child));
-        strcat(str, child->str_val);
+        strcat(str, child->val.str_val);
         strcat(str, ", ");
     }
 
@@ -226,7 +226,7 @@ static pn_object *PnListIterator_HasNext(pn_world *world, pn_object *object, pn_
 
     pn_object *data = PnObject_GetAttr(object, "list");
     pn_object *index = PnObject_GetAttr(object, "index");
-    int i = index->int_val;
+    int i = index->val.int_val;
     int size = List_Size(data->obj_val->extra_val);
 
     return PnBool_Create(world, i + 1 < size);
@@ -243,7 +243,7 @@ static pn_object *PnListIterator_Next(pn_world *world, pn_object *object, pn_obj
 
     // index += 1
     pn_object *index = PnObject_GetAttr(object, "index");
-    int i = index->int_val + 1;
+    int i = index->val.int_val + 1;
     pn_object *nextIndex = PnInteger_Create(world, i);
 
     PnObject_PutAttr(world, object, "index", nextIndex);

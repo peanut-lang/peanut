@@ -1,6 +1,6 @@
-#include "pn_integer.h"
-#include "pn_object.h"
-#include "pn_function.h"
+#include "pninteger.h"
+#include "pnobject.h"
+#include "pnfunction.h"
 
 #include <stdlib.h>
 #include <string.h>
@@ -12,11 +12,11 @@ static pn_object *PnInteger_Add(pn_world *world, pn_object *object, pn_object *p
     pn_object *result = NULL;
 
     if (IS_INTEGER(other)) {
-        result = PnObject_CreateInteger(world);
-        result->int_val = object->int_val + other->int_val;
+        result = PnInteger_Create(world, 0);
+        result->val.int_val = object->val.int_val + other->val.int_val;
     } else if (IS_REAL(other)) {
-        result = PnObject_CreateReal(world);
-        result->real_val = object->int_val + other->real_val;
+        result = PnReal_Create(world, 0.0);
+        result->val.real_val = object->val.int_val + other->val.real_val;
     } else {
         // TODO ??
     }
@@ -31,11 +31,11 @@ static pn_object *PnInteger_Sub(pn_world *world, pn_object *object, pn_object *p
     pn_object *result = NULL;
 
     if (IS_INTEGER(other)) {
-        result = PnObject_CreateInteger(world);
-        result->int_val = object->int_val - other->int_val;
+        result = PnInteger_Create(world, 0);
+        result->val.int_val = object->val.int_val - other->val.int_val;
     } else if (IS_REAL(other)) {
-        result = PnObject_CreateReal(world);
-        result->real_val = object->int_val - other->real_val;
+        result = PnReal_Create(world, 0.0);
+        result->val.real_val = object->val.int_val - other->val.real_val;
     } else {
         // TODO ??
     }
@@ -50,11 +50,11 @@ static pn_object *PnInteger_Mult(pn_world *world, pn_object *object, pn_object *
     pn_object *result = NULL;
 
     if (IS_INTEGER(other)) {
-        result = PnObject_CreateInteger(world);
-        result->int_val = object->int_val * other->int_val;
+        result = PnInteger_Create(world, 0);
+        result->val.int_val = object->val.int_val * other->val.int_val;
     } else if (IS_REAL(other)) {
-        result = PnObject_CreateReal(world);
-        result->real_val = object->int_val * other->real_val;
+        result = PnReal_Create(world, 0.0);
+        result->val.real_val = object->val.int_val * other->val.real_val;
     } else {
         // TODO ??
     }
@@ -69,11 +69,11 @@ static pn_object *PnInteger_Div(pn_world *world, pn_object *object, pn_object *p
     pn_object *result = NULL;
 
     if (IS_INTEGER(other)) {
-        result = PnObject_CreateReal(world);
-        result->real_val = object->int_val / (double) other->int_val;
+        result = PnReal_Create(world, 0.0);
+        result->val.real_val = object->val.int_val / (double) other->val.int_val;
     } else if (IS_REAL(other)) {
-        result = PnObject_CreateReal(world);
-        result->real_val = object->int_val / other->real_val;
+        result = PnReal_Create(world, 0.0);
+        result->val.real_val = object->val.int_val / other->val.real_val;
     } else {
         // TODO ??
     }
@@ -88,8 +88,8 @@ static pn_object *PnInteger_Mod(pn_world *world, pn_object *object, pn_object *p
     pn_object *result = NULL;
 
     if (IS_INTEGER(other)) {
-        result = PnObject_CreateInteger(world);
-        result->int_val = object->int_val % other->int_val;
+        result = PnInteger_Create(world, 0);
+        result->val.int_val = object->val.int_val % other->val.int_val;
     } else if (IS_REAL(other)) {
         // TODO ??
     } else {
@@ -103,7 +103,7 @@ static pn_object *PnInteger_ToString(pn_world *world, pn_object *object, pn_obje
 {
     PN_ASSERT(length == 0);
     char *s = malloc(sizeof(char) * 11);  // maximum is 11
-    sprintf(s, "%d", object->int_val);
+    sprintf(s, "%d", object->val.int_val);
     pn_object *result = PnString_Create(world, s);
     free(s);
     PN_ASSERT(result != 0);
@@ -115,8 +115,8 @@ static pn_object *PnInteger_Eqfn(pn_world *world, pn_object *object, pn_object *
     PN_ASSERT(length == 1);
     pn_object *result = PnInteger_Create(world, 0);
     pn_object *other = params[0];
-    if (IS_INTEGER(other) && object->int_val == other->int_val)
-        result->int_val = 1;
+    if (IS_INTEGER(other) && object->val.int_val == other->val.int_val)
+        result->val.int_val = 1;
     return result;
 }
 
@@ -125,8 +125,8 @@ static pn_object *PnInteger_NEqfn(pn_world *world, pn_object *object, pn_object 
     PN_ASSERT(length == 1);
     pn_object *result = PnInteger_Create(world, 0);
     pn_object *other = params[0];
-    if (IS_INTEGER(other) && object->int_val != other->int_val)
-        result->int_val = 1;
+    if (IS_INTEGER(other) && object->val.int_val != other->val.int_val)
+        result->val.int_val = 1;
     return result;
 }
 
@@ -136,7 +136,7 @@ pn_object *PnInteger_Create(pn_world *world, int value)
     PN_ASSERT(proto != NULL);
     pn_object *o = PnObject_Clone(world, proto);
     PN_ASSERT(o != NULL);
-    o->int_val = value;
+    o->val.int_val = value;
     return o;
 }
 
@@ -144,7 +144,7 @@ pn_object *PnInteger_CreatePrototype(pn_world *world)
 {
     pn_object *o = PnObject_CreateEmptyObject(world);
     o->type = TYPE_INTEGER;
-    o->int_val = 0;
+    o->val.int_val = 0;
 
     // methods..
     PnObject_PutAttr(world, o, "+", PnFunction_CreateByNative(world, PnInteger_Add));

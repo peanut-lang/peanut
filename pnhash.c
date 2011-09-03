@@ -1,10 +1,10 @@
-#include "pn_hash.h"
+#include "pnhash.h"
 #include "hash.h"
-#include "pn_list.h"
-#include "pn_string.h"
-#include "pn_object.h"
-#include "pn_function.h"
-#include "pn_bool.h"
+#include "pnlist.h"
+#include "pnstring.h"
+#include "pnobject.h"
+#include "pnfunction.h"
+#include "pnbool.h"
 
 #include <stdlib.h>
 #include <string.h>
@@ -17,7 +17,7 @@ static pn_object *PnHash_GetItem(pn_world *world, pn_object *object, pn_object *
     PN_ASSERT(length == 1);
     PN_ASSERT(IS_STRING(params[0]));
 
-    pn_object *o = Hash_Get(object->obj_val->extra_val, params[0]->str_val);
+    pn_object *o = Hash_Get(object->obj_val->extra_val, params[0]->val.str_val);
     return o;
 }
 
@@ -29,7 +29,7 @@ static pn_object *PnHash_PutItem(pn_world *world, pn_object *object, pn_object *
     PN_ASSERT(length == 2);
     PN_ASSERT(IS_STRING(params[0]));
 
-    Hash_Put(object->obj_val->extra_val, params[0]->str_val, params[1]);
+    Hash_Put(object->obj_val->extra_val, params[0]->val.str_val, params[1]);
 
     return object;
 }
@@ -61,7 +61,7 @@ static pn_object *PnHash_RemoveItem(pn_world *world, pn_object *object, pn_objec
     PN_ASSERT(length == 1);
     PN_ASSERT(IS_STRING(params[0]));
 
-    pn_object *o = Hash_Remove((hash *)object, params[0]->str_val);
+    pn_object *o = Hash_Remove((hash *)object, params[0]->val.str_val);
     PnObject_Destroy(o);
     return object;
 }
@@ -120,7 +120,7 @@ static pn_object *PnHash_ToString(pn_world *world, pn_object *object, pn_object 
             strcat(str, "'");
             strcat(str, k);
             strcat(str, "' : ");
-            strcat(str, s->str_val);
+            strcat(str, s->val.str_val);
             strcat(str, ", ");
         } while (Hash_Iterator_Advance(itr));
         free(itr);

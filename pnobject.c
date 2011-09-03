@@ -2,10 +2,10 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "pn_object.h"
-#include "pn_function.h"
-#include "pn_string.h"
-#include "pn_bool.h"
+#include "pnobject.h"
+#include "pnfunction.h"
+#include "pnstring.h"
+#include "pnbool.h"
 
 /**
  * clone current object. it's only way to create a object in peanut.
@@ -25,19 +25,19 @@ pn_object *PnObject_Clone(pn_world *world, pn_object *object)
     // create a empty object, copy object, copy values.
     if (IS_INTEGER(object)) {
         obj->type = TYPE_INTEGER;
-        obj->int_val = object->int_val;
+        obj->val.int_val = object->val.int_val;
     } else if (IS_REAL(object)) {
         obj->type = TYPE_REAL;
-        obj->real_val = object->real_val;
+        obj->val.real_val = object->val.real_val;
     } else if (IS_STRING(object)) {
         obj->type = TYPE_STRING;
-        obj->str_val = object->str_val;
+        obj->val.str_val = object->val.str_val;
     } else if (IS_NATIVE(object)) {
         obj->type = TYPE_NATIVE;
-        obj->func.body_pointer = object->func.body_pointer;
+        obj->val.func.body_pointer = object->val.func.body_pointer;
     } else if (IS_FUNCTION(object)) {
         obj->type = TYPE_FUNCTION;
-        obj->func.body_node = object->func.body_node;
+        obj->val.func.body_node = object->val.func.body_node;
     } else if (IS_OBJECT(object)) {
         obj->type = TYPE_OBJECT;
     } else if (IS_BOOL(object)) {
@@ -45,8 +45,7 @@ pn_object *PnObject_Clone(pn_world *world, pn_object *object)
     } else if (IS_NULL(object)) {
         obj->type = TYPE_NULL;
     } else {
-        ANDLOG("object->type = %d\n", object->type);
-        PN_FAIL("PnObject_CloneObject failed.");
+        PN_FAIL("PnObject_Clone failed.");
     }
 
     // if exist obj_val's members, copy memebers to new object.
@@ -98,7 +97,7 @@ static pn_object *PnObject_EqualObject(pn_world *world, pn_object *object, pn_ob
             PN_FAIL("PnObject_EqualObject failed. eqfn is invalid");
         }
     } else {
-        if (IS_OBJECT(object) && IS_NATIVE(eqfn) && eqfn->func.body_pointer == PnObject_EqualObject) {
+        if (IS_OBJECT(object) && IS_NATIVE(eqfn) && eqfn->val.func.body_pointer == PnObject_EqualObject) {
             pn_object *other = params[0];
             if (IS_OBJECT(other) && object->obj_val == other->obj_val)
                 result = PnInteger_Create(world, 1);
@@ -121,7 +120,7 @@ static pn_object *PnObject_EqualReferenceObject(pn_world *world, pn_object *obje
     pn_object *result = PnInteger_Create(world, 0);
     pn_object *other = params[0];
     if (object->obj_val == other->obj_val)
-        result->int_val = 1;
+        result->val.int_val = 1;
     return result;
 }
 
@@ -147,12 +146,12 @@ pn_object *PnObject_ToString(pn_world *world, pn_object *object)
 
     if (IS_NATIVE(object)) {
         char *str = malloc(20);
-        sprintf(str, "NATIVE(%p)", object->func.body_pointer);
+        sprintf(str, "NATIVE(%p)", object->val.func.body_pointer);
         result = PnString_Create(world, str);
         free(str);
     } else if(IS_FUNCTION(object)) {
         char *str = malloc(20);
-        sprintf(str, "FUNC(%p)", object->func.body_node);
+        sprintf(str, "FUNC(%p)", object->val.func.body_node);
         result = PnString_Create(world, str);
         free(str);
     } else if (!IS_OBJECT(object) && to_str != NULL) {
@@ -173,7 +172,7 @@ pn_object *PnObject_ToString(pn_world *world, pn_object *object)
                     strcat(buf, key);
                     strcat(buf, "'");
                     strcat(buf, " => ");
-                    strcat(buf, toStr->str_val);
+                    strcat(buf, toStr->val.str_val);
                     strcat(buf, ", ");
                 } while(Hash_Iterator_Advance(itr));
             }
@@ -252,24 +251,24 @@ pn_object *PnObject_CreateFromReference(pn_world *world, pn_object *other)
 
     if (IS_INTEGER(other)) {
         obj->type = TYPE_INTEGER;
-        obj->int_val = other->int_val;
+        obj->val.int_val = other->val.int_val;
     } else if (IS_REAL(other)) {
         obj->type = TYPE_REAL;
-        obj->real_val = other->real_val;
+        obj->val.real_val = other->val.real_val;
     } else if (IS_STRING(other)) {
         obj->type = TYPE_STRING;
-        obj->str_val = other->str_val;
+        obj->val.str_val = other->val.str_val;
     } else if (IS_NATIVE(other)) {
         obj->type = TYPE_NATIVE;
-        obj->func.body_pointer = other->func.body_pointer;
+        obj->val.func.body_pointer = other->val.func.body_pointer;
     } else if (IS_FUNCTION(other)) {
         obj->type = TYPE_FUNCTION;
-        obj->func.body_node = other->func.body_node;
+        obj->val.func.body_node = other->val.func.body_node;
     } else if (IS_OBJECT(other)) {
         obj->type = TYPE_OBJECT;
     } else if (IS_BOOL(other)) {
         obj->type = TYPE_BOOL;
-        obj->bool_val = other->bool_val;
+        obj->val.bool_val = other->val.bool_val;
     } else if (IS_NULL(other)) {
         obj->type = TYPE_NULL;
     } else {
@@ -339,7 +338,7 @@ void PnObject_Destroy(pn_object *obj)
             free(obj->obj_val);
 
             if (obj->type == TYPE_STRING)
-                free(obj->str_val);
+                free(obj->val.str_val);
         }
     }
     free(obj);
@@ -354,13 +353,13 @@ bool PnObject_IsTrue(pn_object *value)
 
     if (IS_NULL(value))
         return false;
-    else if (IS_INTEGER(value) && value->int_val == 0)
+    else if (IS_INTEGER(value) && value->val.int_val == 0)
         return false;
-    else if (IS_REAL(value) && value->real_val == 0.0)
+    else if (IS_REAL(value) && value->val.real_val == 0.0)  // TODO need tolerance
         return false;
-    else if (IS_STRING(value) && value->str_val == NULL)
+    else if (IS_STRING(value) && value->val.str_val == NULL)
         return false;
-    else if (IS_BOOL(value) && value->bool_val == false)
+    else if (IS_BOOL(value) && value->val.bool_val == false)
         return false;
 
     return true;
@@ -378,11 +377,11 @@ pn_object *PnObject_CreateByObject(pn_world *world, pn_object *object)
     pn_object *result = NULL;
 
     if (IS_INTEGER(object))
-        result = PnInteger_Create(world, object->int_val);
+        result = PnInteger_Create(world, object->val.int_val);
     else if (IS_REAL(object))
-        result = PnReal_Create(world, object->real_val);
+        result = PnReal_Create(world, object->val.real_val);
     else if (IS_STRING(object))
-        result = PnString_Create(world, object->str_val);
+        result = PnString_Create(world, object->val.str_val);
     else if (IS_NULL(object))
         result = PnNull_Create(world);
     else
@@ -416,27 +415,3 @@ pn_object *PnObject_Inherit(pn_world *world, pn_object *super, pn_object *child)
     return child;
 }
 
-pn_object *PnObject_CreateBool(pn_world *world)
-{
-    return PnBool_Create(world, false);
-}
-
-pn_object *PnObject_CreateInteger(pn_world *world)
-{
-    return PnInteger_Create(world, 0);
-}
-
-pn_object *PnObject_CreateReal(pn_world *world)
-{
-    return PnReal_Create(world, 0.0);
-}
-
-pn_object *PnObject_CreateString(pn_world *world)
-{
-    return PnString_Create(world, "");
-}
-
-pn_object *PnObject_CreateNull(pn_world *world)
-{
-    return PnNull_Create(world);
-}

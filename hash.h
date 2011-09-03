@@ -1,5 +1,5 @@
-#ifndef PEANUT_HASH_H
-#define PEANUT_HASH_H
+#ifndef _PEANUT_HASH_H_
+#define _PEANUT_HASH_H_
 
 #include "globals.h"
 #include <stdbool.h>
@@ -44,5 +44,4 @@ int Hash_Iterator_Advance(hash_itr *itr);
 int Hash_Iterator_Remove(hash_itr *itr);
 int Hash_Iterator_Search(hash_itr *itr, hash *h, const char *k);
 
-#endif//PEANUT_HASH_H
-
+#endif//_PEANUT_HASH_H_

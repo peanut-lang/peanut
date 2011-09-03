@@ -1,4 +1,4 @@
-#include "pn_function.h"
+#include "pnfunction.h"
 
 #include <stdlib.h>
 #include <string.h>
@@ -8,7 +8,7 @@ pn_object *PnFunction_CreateByNative(pn_world *world, pn_function_native func_bo
 {
     pn_object *obj = PnObject_CreateEmptyObjectByNotMembers(world);
     obj->type = TYPE_NATIVE;
-    obj->func.body_pointer = func_body;
+    obj->val.func.body_pointer = func_body;
     return obj;
 }
 
@@ -20,7 +20,7 @@ pn_object *PnFunction_CreateByNode(pn_world *world, pn_node *func_code)
 {
     pn_object *obj = PnObject_CreateEmptyObjectByNotMembers(world);
     obj->type = TYPE_FUNCTION;
-    obj->func.body_node = func_code;
+    obj->val.func.body_node = func_code;
     return obj;
 }
 
@@ -39,16 +39,16 @@ pn_object *PnFunction_ExecuteByFuncObject(pn_object* pn_func, pn_world *world, p
 
     pn_object *value = NULL;
     if (IS_NATIVE(pn_func)) {
-        PN_ASSERT(pn_func->func.body_pointer != NULL);
-        value = (*(pn_func->func.body_pointer))(world, object, params, length);
+        PN_ASSERT(pn_func->val.func.body_pointer != NULL);
+        value = (*(pn_func->val.func.body_pointer))(world, object, params, length);
     } else if (IS_FUNCTION(pn_func)) {
-        PN_ASSERT(pn_func->func.body_node != NULL);
+        PN_ASSERT(pn_func->val.func.body_node != NULL);
         pn_node *stmt_list = NULL;
 
-        if (pn_func->func.body_node->node_type == NODE_DEF_FUNC)
-            stmt_list = pn_func->func.body_node->def_func.stmt_list;
-        else if (pn_func->func.body_node->node_type == NODE_LAMBDA)
-            stmt_list = pn_func->func.body_node->lambda.stmt_list;
+        if (pn_func->val.func.body_node->node_type == NODE_DEF_FUNC)
+            stmt_list = pn_func->val.func.body_node->def_func.stmt_list;
+        else if (pn_func->val.func.body_node->node_type == NODE_LAMBDA)
+            stmt_list = pn_func->val.func.body_node->lambda.stmt_list;
         else
             PN_FAIL("bad pn_func");
 

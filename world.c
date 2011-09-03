@@ -1,10 +1,10 @@
 #include "world.h"
 #include "hash.h"
 #include "stack.h"
-#include "pn_object.h"
-#include "pn_list.h"
-#include "pn_hash.h"
-#include "pn_stdio.h"
+#include "pnobject.h"
+#include "pnlist.h"
+#include "pnhash.h"
+#include "pnstdio.h"
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>

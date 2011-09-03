@@ -1,9 +1,9 @@
 #define PEANUT_DEBUG
 #include "eval.h"
 #include "world.h"
-#include "pn_function.h"
-#include "pn_list.h"
-#include "pn_hash.h"
+#include "pnfunction.h"
+#include "pnlist.h"
+#include "pnhash.h"
 
 #include <stdlib.h>
 #include <string.h>
@@ -25,19 +25,19 @@ static void print_value(pn_world *world, pn_object *value)
     if (IS_NULL(value))
         printf(">> (null)\n");
     else if (IS_INTEGER(value))
-        printf(">>(int) : %s\n", str->str_val);
+        printf(">>(int) : %s\n", str->val.str_val);
     else if (IS_REAL(value))
-        printf(">> (real): %s\n", str->str_val);
+        printf(">> (real): %s\n", str->val.str_val);
     else if (IS_STRING(value))
-        printf(">> (str) : %d, '%s'\n", (int)strlen(str->str_val), str->str_val);
+        printf(">> (str) : %d, '%s'\n", (int)strlen(str->val.str_val), str->val.str_val);
     else if (IS_OBJECT(value))
-        printf(">> (obj) : %s\n", str->str_val);
+        printf(">> (obj) : %s\n", str->val.str_val);
     else if (IS_NATIVE(value))
-        printf(">> (code native) : %s\n", str->str_val);
+        printf(">> (code native) : %s\n", str->val.str_val);
     else if (IS_FUNCTION(value))
-        printf(">> (code) : %s\n", str->str_val);
+        printf(">> (code) : %s\n", str->val.str_val);
     else if (IS_BOOL(value))
-        printf(">> (bool) : %s\n", str->str_val);
+        printf(">> (bool) : %s\n", str->val.str_val);
     else
         printf(">> (undefined!! %d)\n", value->type);
 }
@@ -94,7 +94,7 @@ static pn_object *evaluate_hash(pn_world *world, pn_node *node)
     pn_hash_item *item_node = node->hash_items;
     while (item_node != NULL) {
         pn_object *value = execute_one_step(world, item_node->value);
-        Hash_Put(h, item_node->key->value.str_val, value);
+        Hash_Put(h, item_node->key->value.val.str_val, value);
         item_node = item_node->next_item;
     }
 
@@ -135,10 +135,10 @@ static pn_object *evaluate_expression(pn_world *world, pn_node *node)
         if (pn_func != NULL) {
             World_StartScope(world, node);
             //printf("expression StartScope\n");
-            if (pn_func->func.body_node->node_type == NODE_DEF_FUNC)
-                var_name_cur = pn_func->func.body_node->def_func.simple_var_list;
-            else if (pn_func->func.body_node->node_type == NODE_LAMBDA)
-                var_name_cur = pn_func->func.body_node->lambda.simple_var_list;
+            if (pn_func->val.func.body_node->node_type == NODE_DEF_FUNC)
+                var_name_cur = pn_func->val.func.body_node->def_func.simple_var_list;
+            else if (pn_func->val.func.body_node->node_type == NODE_LAMBDA)
+                var_name_cur = pn_func->val.func.body_node->lambda.simple_var_list;
             else
                 PN_FAIL("error. bad pn_func");
 
@@ -184,7 +184,7 @@ static pn_object *evaluate_expression(pn_world *world, pn_node *node)
         if (IS_NATIVE(pn_func)) {
             // do nothing..
         } else if (IS_FUNCTION(pn_func)) {
-            var_name_cur = pn_func->func.body_node->def_func.simple_var_list;
+            var_name_cur = pn_func->val.func.body_node->def_func.simple_var_list;
             size = count_siblings(var_name_cur);
 
             for (i = 0; var_name_cur != NULL && i < size; i++) {
@@ -211,7 +211,7 @@ static pn_object *evaluate_if_stmt(pn_world *world, pn_node *node)
     PN_ASSERT(node != NULL);
 
     pn_node *cur = node;
-    pn_object *last = PnObject_CreateNull(world);
+    pn_object *last = PnNull_Create(world);
 
     while (cur != NULL) {
         pn_node *expr = cur->if_stmt.expr;
@@ -236,7 +236,7 @@ static pn_object *evaluate_if_stmt(pn_world *world, pn_node *node)
             pn_object *condition = execute_one_step(world, expr);
             if (PnObject_IsTrue(condition))
             {
-                last = PnObject_CreateNull(world);
+                last = PnNull_Create(world);
                 break;
             }
         } else {
@@ -266,7 +266,7 @@ static pn_object *evaluate_while_stmt(pn_world *world, pn_node *node)
     pn_node *stmt_list = node->while_stmt.stmt_list;
     PN_ASSERT(expr != NULL);
 
-    pn_object *last = PnObject_CreateNull(world);
+    pn_object *last = PnNull_Create(world);
     pn_object *condition = NULL;
 
     // for scope of variables in conditional expression,
@@ -293,7 +293,7 @@ static pn_object *evaluate_for_stmt(pn_world *world, pn_node *node)
 
     char *var_name = node->for_stmt.var_name;
     pn_object *object = execute_one_step(world, node->for_stmt.expr);
-    pn_object *last = PnObject_CreateNull(world);
+    pn_object *last = PnNull_Create(world);
 
     pn_object *iterator = PnFunction_ExecuteByObject("iterator", world, object, NULL, 0);
 
@@ -391,7 +391,7 @@ static pn_object *evaluate_return_stmt(pn_world *world, pn_node *node)
 
     // evaluate return expression
     if (node->return_stmt.expr == NULL)
-        return_value = PnObject_CreateNull(world);
+        return_value = PnNull_Create(world);
     else
         return_value = execute_one_step(world, node->return_stmt.expr);
 

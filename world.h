@@ -1,5 +1,5 @@
-#ifndef PEANUT_WORLD_H
-#define PEANUT_WORLD_H
+#ifndef _PEANUT_WORLD_H_
+#define _PEANUT_WORLD_H_
 
 #include "globals.h"
 #include "stack.h"
@@ -7,8 +7,7 @@
 
 #define NONAME_HASH_KEY "%noname_vars_count"
 
-typedef struct _scope_item
-{
+typedef struct _scope_item {
     hash *h;
     list *l;
 } scope_item;
@@ -24,5 +23,5 @@ pn_object *World_GetObjectAtBase(pn_world *w, const char *name);
 void World_PutObjectAtBase(pn_world *w, const char *name, pn_object *v);
 void World_RemoveObject(pn_world *w, const char *name);
 
-#endif//PEANUT_WORLD_H
+#endif//_PEANUT_WORLD_H_
 

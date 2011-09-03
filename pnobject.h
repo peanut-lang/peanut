@@ -1,13 +1,13 @@
-#ifndef PEANUT_PN_OBJECT_H
-#define PEANUT_PN_OBJECT_H
+#ifndef _PEANUT_PNOBJECT_H_
+#define _PEANUT_PNOBJECT_H_
 
 #include <stdbool.h>
 #include "globals.h"
-#include "pn_integer.h"
-#include "pn_real.h"
-#include "pn_string.h"
-#include "pn_null.h"
-#include "pn_bool.h"
+#include "pninteger.h"
+#include "pnreal.h"
+#include "pnstring.h"
+#include "pnnull.h"
+#include "pnbool.h"
 
 #include "hash.h"
 
@@ -35,10 +35,4 @@ pn_object *PnObject_CreateByNode(pn_world *world, pn_node *node);
 pn_object *PnObject_CreateByObject(pn_world *world, pn_object *object);
 pn_object *PnObject_Inherit(pn_world *world, pn_object *super, pn_object *child);
 
-pn_object *PnObject_CreateBool(pn_world *world);
-pn_object *PnObject_CreateInteger(pn_world *world);
-pn_object *PnObject_CreateReal(pn_world *world);
-pn_object *PnObject_CreateString(pn_world *world);
-pn_object *PnObject_CreateNull(pn_world *world);
-
-#endif//PEANUT_PN_OBJECT_H
+#endif//_PEANUT_PNOBJECT_H_

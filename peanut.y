@@ -31,7 +31,7 @@
     void lex_push_buffer(char *code);
     void lex_pop_buffer();
 
-    static pn_node *new_node(NODE_TYPE node_type);
+    static pn_node *new_node(enum node_type node_type);
     static pn_node *new_expression(pn_node *object, char *operator, pn_node *other);
     static pn_node *new_property(pn_node *object, pn_node *property);
     static pn_node *add_to_last(pn_node *node, pn_node *next);
@@ -255,14 +255,14 @@ literal             : STRING
                         {
                             pn_node *node = new_node(NODE_LITERAL);
                             node->value.type = TYPE_STRING;
-                            node->value.str_val = $1;
+                            node->value.val.str_val = $1;
                             $$ = node;
                         }
                     | REAL
                         {
                             pn_node *node = new_node(NODE_LITERAL);
                             node->value.type = TYPE_REAL;
-                            node->value.real_val = atof($1);
+                            node->value.val.real_val = atof($1);
                             $$ = node;
                             //free($1);
                         }
@@ -270,7 +270,7 @@ literal             : STRING
                         {
                             pn_node *node = new_node(NODE_LITERAL);
                             node->value.type = TYPE_INTEGER;
-                            node->value.int_val = atoi($1);
+                            node->value.val.int_val = atoi($1);
                             $$ = node;
                             //free($1);
                         }
@@ -493,7 +493,7 @@ void usage()
 static void run_repl(pn_world *world)
 {
     static unsigned int lineno = 0;
-    char *total = (char *)pn_alloc(sizeof(char) * INPUT_STR_BUF * 30);
+    char *total = (char *)malloc(sizeof(char) * INPUT_STR_BUF * 30);
     char input[INPUT_STR_BUF];
 
     while (1) {
@@ -567,7 +567,7 @@ static int readfile(const char* filename, char** result)
     fseek(f, 0, SEEK_END);
     size = ftell(f);
     fseek(f, 0, SEEK_SET);
-    *result = (char*)pn_alloc(sizeof(char*) * size + 1);
+    *result = (char*)malloc(sizeof(char*) * size + 1);
     if (size != fread(*result, sizeof(char), size, f)) {
         free(*result);
         return -2;
@@ -656,7 +656,7 @@ pn_object *Peanut_EvalFromFile(char *filename, pn_world *world, bool trace)
 
     //len_tree_nodes = 0;
     //len_tree_nodes = world->len_tree_nodes;
-    //tree_nodes = (pn_node**)pn_alloc(sizeof(pn_node*) * SIZE_TREE_NODES);
+    //tree_nodes = (pn_node**)malloc(sizeof(pn_node*) * SIZE_TREE_NODES);
     int parsed = yyparse();
 
     // restore buffer
@@ -689,7 +689,7 @@ pn_object *Peanut_EvalFromString(char *code, pn_world *world, bool trace)
     lex_push_buffer(code);
 
     //len_tree_nodes = 0;
-    //tree_nodes = (pn_node**)pn_alloc(sizeof(pn_node*) * SIZE_TREE_NODES);
+    //tree_nodes = (pn_node**)malloc(sizeof(pn_node*) * SIZE_TREE_NODES);
     //len_tree_nodes = world->len_tree_nodes;
     int parsed = yyparse();
 
@@ -736,15 +736,13 @@ int node_index = 0;
 /**
  * create a node
  */
-static pn_node *new_node(NODE_TYPE node_type)
+static pn_node *new_node(enum node_type node_type)
 {
-    //pn_node *node = (pn_node *)pn_alloc(sizeof(pn_node));
+    //pn_node *node = (pn_node *)malloc(sizeof(pn_node));
     pn_node *node = &nodes[node_index++];
 
     //FIXME: need debug
     //tree_nodes[len_tree_nodes++] = node;
-
-    //ANDLOG("len_tree_nodes=%d\n", len_tree_nodes);
 
     PN_ASSERT(node != NULL);
     memset(node, 0, sizeof(node));
@@ -862,7 +860,7 @@ static pn_node *new_hash(pn_hash_item *items)
 
 static pn_hash_item *new_hash_item(pn_node *key, pn_node* value)
 {
-    pn_hash_item *item = pn_alloc(sizeof(pn_hash_item));
+    pn_hash_item *item = malloc(sizeof(pn_hash_item));
     PN_ASSERT(item != NULL);
     item->key = key;
     item->value = value;

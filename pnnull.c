@@ -1,7 +1,7 @@
-#include "pn_null.h"
-#include "pn_object.h"
-#include "pn_function.h"
-#include "pn_string.h"
+#include "pnnull.h"
+#include "pnobject.h"
+#include "pnfunction.h"
+#include "pnstring.h"
 
 pn_object *PnNull_IsNull(pn_world *world, pn_object *object, pn_object *params[], int length)
 {

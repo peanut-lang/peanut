@@ -1,7 +1,7 @@
-#include "pn_stdio.h"
-#include "pn_object.h"
-#include "pn_function.h"
-#include "pn_string.h"
+#include "pnstdio.h"
+#include "pnobject.h"
+#include "pnfunction.h"
+#include "pnstring.h"
 #include <string.h>
 #include <stdlib.h>
 
@@ -27,9 +27,9 @@ static pn_object *PnStdio_Print(pn_world *world, pn_object *object, pn_object *p
 
     PN_ASSERT(IS_STRING(a_param));
 
-    __print(a_param->str_val);
+    __print(a_param->val.str_val);
 
-    pn_object *ret = PnString_Create(world, a_param->str_val);
+    pn_object *ret = PnString_Create(world, a_param->val.str_val);
     PN_ASSERT(ret != NULL);
     PN_ASSERT(IS_STRING(ret));
     return ret;
@@ -50,12 +50,12 @@ static pn_object *PnStdio_PrintLine(pn_world *world, pn_object *object, pn_objec
 
     PN_ASSERT(IS_STRING(a_param));
 
-    __print(a_param->str_val);
+    __print(a_param->val.str_val);
     __print("\n");
 
-    size_t len = strlen(a_param->str_val);
+    size_t len = strlen(a_param->val.str_val);
     char *s = (char *)malloc(sizeof(char) * (len + 2));
-    strcpy(s, a_param->str_val);
+    strcpy(s, a_param->val.str_val);
     s[len] = '\n';
     s[len+1] = 0;
 

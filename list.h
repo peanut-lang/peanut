@@ -1,11 +1,10 @@
-#ifndef PEANUT_LIST_H
-#define PEANUT_LIST_H
+#ifndef _PEANUT_LIST_H_
+#define _PEANUT_LIST_H_
 
 #include <stdbool.h>
 #include <sys/types.h>
 
-typedef struct _list
-{
+typedef struct _list {
     void **data;
     size_t size;
     size_t reserved_size;
@@ -32,4 +31,4 @@ void List_Remove(list *l, int which, size_t size, item_deleter deleter);
 void List_InsertItem(list *l, int which, void *item);
 void List_InsertList(list *l, int which, list *other, bool remove_other);
 
-#endif//PEANUT_LIST_H
+#endif//_PEANUT_LIST_H_

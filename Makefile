@@ -7,7 +7,7 @@ YACC= bison
 YFLAGS= -v -d
 
 CC= gcc
-CFLAGS= -g -Wall
+CFLAGS= -g -Wall -std=gnu99
 
 LIBS= -lfl
 
@@ -23,16 +23,17 @@ OBJS= \
 	hash.o \
 	list.o \
 	stack.o \
-	pn_integer.o \
-	pn_real.o \
-	pn_string.o \
-	pn_bool.o \
-	pn_object.o \
-	pn_function.o \
-	pn_null.o \
-	pn_list.o \
-	pn_hash.o \
-	pn_stdio.o
+	strtable.o \
+	pnobject.o \
+	pninteger.o \
+	pnreal.o \
+	pnstring.o \
+	pnbool.o \
+	pnfunction.o \
+	pnnull.o \
+	pnlist.o \
+	pnhash.o \
+	pnstdio.o
 
 $(BIN): $(OBJS)
 	$(CC) $(CFLAGS) -lm -o $@ $^ $(LIBS)

@@ -1,5 +1,5 @@
-#ifndef PEANUT_GLOBALS_H
-#define PEANUT_GLOBALS_H
+#ifndef _PEANUT_GLOBALS_H_
+#define _PEANUT_GLOBALS_H_
 
 #ifdef GLOBAL
     #define EXTERN
@@ -10,29 +10,12 @@
 
 #include <stdio.h>
 
-// log for android
-#ifdef ANDROID
-    #include "samples/android/jni/andlog.h"
-    #define fprintf(x, ...) (((x) == stdout) ? PRINT(__VA_ARGS__) : ERROR(__VA_ARGS__))
-    #define printf(...) PRINT(__VA_ARGS__)
-#endif
-
-
-#ifdef ANDROID
-    #define ANDLOG(...) PRINT(__VA_ARGS__)
-#else
-    #define ANDLOG(...)
-#endif
-
-
 //#define YYSTYPE pn_node*
 
 #ifdef PEANUT_DEBUG
     #define pn_debug printf
-    //#define pn_info __pn_info
 #else
     #define pn_debug while (0) printf
-    //#define pn_info while (0) printf
 #endif
 
 #ifndef NULL
@@ -52,12 +35,6 @@
 
 #define PN_ASSERT assert
 #define PN_FAIL(x) PN_ASSERT(0 && (x))
-
-// log for android
-#ifdef ANDROID
-    #undef PN_ASSERT
-    #define PN_ASSERT ASSERT
-#endif//ANDROID
 
 #define PROTONAME_BOOL "Bool"
 #define PROTONAME_INTEGER "Integer"
@@ -97,7 +74,7 @@ typedef enum _TYPE {
     TYPE_END,
 } TYPE;
 
-typedef enum _NODE_TYPE {
+enum node_type {
     // value statements
     NODE_LITERAL,
     NODE_VAR_NAME,
@@ -118,7 +95,7 @@ typedef enum _NODE_TYPE {
     // don't edit this.
     NODE_MAX_COUNT,
     NODE_EMPTY,
-} NODE_TYPE;
+};
 
 typedef struct _pn_world {
     struct _stack *scope;
@@ -146,7 +123,7 @@ typedef struct _pn_object {
             struct _pn_object *(* body_pointer)(struct _pn_world *, struct _pn_object *, struct _pn_object **, int);
             struct _pn_node *body_node;
         } func;
-    };
+    } val;
 } pn_object;
 
 typedef struct _pn_hash_item {
@@ -156,10 +133,10 @@ typedef struct _pn_hash_item {
 } pn_hash_item;
 
 typedef struct _pn_node {
-    NODE_TYPE node_type;
+    enum node_type node_type;
     struct _pn_node *sibling;
 
-    union {
+//    union {
         // LITERAL: STRING, INT, REAL
         pn_object value;
 
@@ -228,11 +205,10 @@ typedef struct _pn_node {
         struct {
             struct _pn_node *expr;
         } return_stmt;
-    };
+//    } node;
 } pn_node;
 
 // global variables
 EXTERN pn_node* peanut_tree;
 
-#endif/*PEANUT__GLOBALS_H_*/
-
+#endif//_PEANUT__GLOBALS_H_

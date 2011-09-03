@@ -1,12 +1,12 @@
-#ifndef PEANUT_PN_STDIO_H_
-#define PEANUT_PN_STDIO_H_
+#ifndef _PEANUT_PNSTDIO_H_
+#define _PEANUT_PNSTDIO_H_
 
-#include "pn_object.h"
+#include "pnobject.h"
 #include "world.h"
 
 #define INPUT_BUFFER_SIZE 1024
 
 pn_object *PnStdio_CreatePrototype(pn_world *world);
 
-#endif//PEANUT_PN_STDIO_H_
+#endif//_PEANUT_PNSTDIO_H_
 
