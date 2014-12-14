@@ -1,5 +1,4 @@
 %{
-    #define PEANUT_DEBUG
     #define GLOBAL
     #include "globals.h"
     #undef GLOBAL

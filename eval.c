@@ -1,4 +1,3 @@
-#define PEANUT_DEBUG
 #include "eval.h"
 #include "world.h"
 #include "pnfunction.h"
@@ -7,7 +6,6 @@
 
 #include <stdlib.h>
 #include <string.h>
-
 
 static void print_value(pn_world *world, pn_object *value)
 {
@@ -451,17 +449,13 @@ pn_object *execute_one_step(pn_world *world, pn_node *node)
     pn_object *return_value = NULL;
     PN_ASSERT(node != NULL);
 
-    //pn_debug("node type = %d\tsibling = %p\n", node->node_type, node->sibling);
+    pn_debug("node type = %d\tsibling = %p\n", node->node_type, node->sibling);
 
     // execute a statement for the type
     if (node->node_type && node->node_type < NODE_MAX_COUNT)
         return_value = evaluate_functions[node->node_type](world, node);
     else
         printf("bad node type: %d\n", (int)node->node_type);
-
-    //#ifdef PEANUT_DEBUG
-    //print_value(return_value);
-    //#endif
 
     return return_value;
 }

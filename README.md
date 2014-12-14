@@ -12,5 +12,10 @@ and, you can build and run samples.
     $ make
     $ make test
 
+or, build with debug logs and run samples.
+
+    $ make CFLAGS=-DPEANUT_DEBUG
+    $ make test
+
 [Repository]: http://github.com/peanut-lang/peanut
 [MIT License]: http://en.wikipedia.org/wiki/MIT_License
