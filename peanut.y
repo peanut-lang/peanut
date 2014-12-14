@@ -745,7 +745,7 @@ static pn_node *new_node(enum node_type node_type)
     //tree_nodes[len_tree_nodes++] = node;
 
     PN_ASSERT(node != NULL);
-    memset(node, 0, sizeof(node));
+    memset(node, 0, sizeof(pn_node));
     node->node_type = node_type;
     //node->lineno = g_line_no;
     return node;

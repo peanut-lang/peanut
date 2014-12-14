@@ -9,7 +9,7 @@ YFLAGS= -v -d
 CC= gcc
 CFLAGS= -g -Wall -std=gnu99
 
-LIBS= -lfl
+LIBS= -lm
 
 .SUFFIXES: .c .o
 
@@ -36,7 +36,7 @@ OBJS= \
 	pnstdio.o
 
 $(BIN): $(OBJS)
-	$(CC) $(CFLAGS) -lm -o $@ $^ $(LIBS)
+	$(CC) $(CFLAGS) -o $@ $^ $(LIBS)
 
 all: $(BIN)
 

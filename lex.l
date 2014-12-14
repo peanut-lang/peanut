@@ -15,6 +15,7 @@
     #define YY_NO_INPUT
 %}
 
+%option noyywrap
 %option nounput
 
 digit [0-9]

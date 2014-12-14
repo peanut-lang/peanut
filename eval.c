@@ -454,7 +454,7 @@ pn_object *execute_one_step(pn_world *world, pn_node *node)
     //pn_debug("node type = %d\tsibling = %p\n", node->node_type, node->sibling);
 
     // execute a statement for the type
-    if (0 <= node->node_type && node->node_type < NODE_MAX_COUNT)
+    if (node->node_type && node->node_type < NODE_MAX_COUNT)
         return_value = evaluate_functions[node->node_type](world, node);
     else
         printf("bad node type: %d\n", (int)node->node_type);
