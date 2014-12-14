@@ -1,5 +1,13 @@
 # Makefile of peanut
 
+OS=$(shell uname -s)
+ifeq ($(OS), Linux)
+DEBUGSYMBOL= -rdynamic
+endif
+ifeq ($(OS), Darwin)
+DEBUGSYMBOL=
+endif
+
 LEX= flex
 LFLAGS=
 
@@ -7,7 +15,7 @@ YACC= bison
 YFLAGS= -v -d
 
 CC= gcc
-CFLAGS= -g -Wall -std=gnu99
+CFLAGS= -g $(DEBUGSYMBOL) -Wall -std=gnu99
 
 LIBS= -lm
 

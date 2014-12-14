@@ -32,9 +32,7 @@
 #include "list.h"
 #include "hash.h"
 #include "stack.h"
-
-#define PN_ASSERT assert
-#define PN_FAIL(x) PN_ASSERT(0 && (x))
+#include "utils.h"
 
 #define PROTONAME_BOOL "Bool"
 #define PROTONAME_INTEGER "Integer"
