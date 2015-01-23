@@ -8,6 +8,10 @@ ifeq ($(OS), Darwin)
 DEBUGSYMBOL=
 endif
 
+.PHONY: directories
+
+BUILD=out
+
 LEX= flex
 LFLAGS=
 
@@ -23,50 +27,59 @@ LIBS= -lm
 
 BIN=peanut
 
+dir_guard=@mkdir -p $(BUILD)
+
 OBJS= \
-	lex.yy.o \
-	peanut.tab.o \
-	world.o \
-	eval.o \
-	hash.o \
-	list.o \
-	stack.o \
-	strtable.o \
-	pnobject.o \
-	pninteger.o \
-	pnreal.o \
-	pnstring.o \
-	pnbool.o \
-	pnfunction.o \
-	pnnull.o \
-	pnlist.o \
-	pnhash.o \
-	pnstdio.o
+	$(BUILD)/lex.yy.o \
+	$(BUILD)/peanut.tab.o \
+	$(BUILD)/world.o \
+	$(BUILD)/eval.o \
+	$(BUILD)/hash.o \
+	$(BUILD)/list.o \
+	$(BUILD)/stack.o \
+	$(BUILD)/strtable.o \
+	$(BUILD)/pnobject.o \
+	$(BUILD)/pninteger.o \
+	$(BUILD)/pnreal.o \
+	$(BUILD)/pnstring.o \
+	$(BUILD)/pnbool.o \
+	$(BUILD)/pnfunction.o \
+	$(BUILD)/pnnull.o \
+	$(BUILD)/pnlist.o \
+	$(BUILD)/pnhash.o \
+	$(BUILD)/pnstdio.o
+
+
+all: $(BIN)
 
 $(BIN): $(OBJS)
 	$(CC) $(CFLAGS) -o $@ $^ $(LIBS)
 
-all: $(BIN)
+$(BUILD)/lex.yy.o: $(BUILD)/lex.yy.c $(BUILD)/peanut.tab.h $(BUILD)/peanut.tab.o
+	$(dir_guard)
+	$(CC) $(CFLAGS) -Isrc -o $@ -c $(BUILD)/lex.yy.c
 
-lex.yy.o: lex.yy.c peanut.tab.h peanut.tab.o
-	$(CC) $(CFLAGS) -o $@ -c lex.yy.c
-
-lex.yy.c: lex.l
+$(BUILD)/lex.yy.c: src/lex.l
+	$(dir_guard)
 	$(LEX) $(LFLAGS) -o $@ $<
 
-peanut.tab.h: peanut.y
+$(BUILD)/peanut.tab.h: src/peanut.y
 
-peanut.tab.c: peanut.y
+$(BUILD)/peanut.tab.c: src/peanut.y
+	$(dir_guard)
 	$(YACC) $(YFLAGS) -o $@ $<
 
-peanut.tab.o: peanut.tab.c
-	$(CC) $(CFLAGS) -o $@ -c $<
+$(BUILD)/peanut.tab.o: $(BUILD)/peanut.tab.c
+	$(dir_guard)
+	$(CC) $(CFLAGS) -Isrc -o $@ -c $<
 
-.c.o:
-	$(CC) $(CFLAGS) -c $<
+$(BUILD)/%.o: src/%.c
+	$(dir_guard)
+	$(CC) $(CFLAGS) -Isrc -c $< -o $@
 
 test: $(BIN)
 	./$(BIN) -t tests/example1.pn tests/example2.pn < tests/input.txt
 
 clean:
-	rm -f $(BIN) peanut.tab.c peanut.tab.h peanut.output lex.yy.c test_* $(OBJS)
+	rm -f $(BIN)
+	rm -rf $(BUILD)
